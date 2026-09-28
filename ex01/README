@@ -1,0 +1,147 @@
+# CPP06 - Exercise 01: Serialization
+
+## Objetivo
+
+Crear una clase `Serializer` capaz de convertir un puntero `Data*` en un número `uintptr_t` y volver a convertir ese número en un puntero `Data*`.
+
+El ejercicio sirve principalmente para practicar `reinterpret_cast`.
+
+## Funcionamiento
+
+La clase contiene dos métodos estáticos:
+
+```cpp
+static uintptr_t serialize(Data *ptr);
+static Data *deserialize(uintptr_t raw);
+```
+
+El programa realiza el siguiente proceso:
+
+```text
+Data*
+  ↓
+serialize()
+  ↓
+uintptr_t
+  ↓
+deserialize()
+  ↓
+Data*
+```
+
+Al final se comprueba que el puntero obtenido después de `deserialize()` es igual al puntero original.
+
+## Data
+
+Se crea una estructura `Data` no vacía:
+
+```cpp
+struct Data
+{
+    int number;
+    char letter;
+};
+```
+
+Por ejemplo:
+
+```cpp
+data.number = 42;
+data.letter = 'A';
+```
+
+## `serialize()`
+
+Recibe un `Data*` y convierte su dirección en un `uintptr_t`.
+
+```cpp
+uintptr_t Serializer::serialize(Data *ptr)
+{
+    return reinterpret_cast<uintptr_t>(ptr);
+}
+```
+
+## `deserialize()`
+
+Recibe el `uintptr_t` y lo convierte de nuevo en un `Data*`.
+
+```cpp
+Data *Serializer::deserialize(uintptr_t raw)
+{
+    return reinterpret_cast<Data *>(raw);
+}
+```
+
+## Cast utilizado
+
+En este ejercicio se utiliza:
+
+```cpp
+reinterpret_cast
+```
+
+Se utiliza para convertir la dirección representada por un puntero en un `uintptr_t` y posteriormente recuperar el puntero original.
+
+## Comprobación
+
+En `main.cpp` se crea un objeto `Data` y se guarda su dirección:
+
+```cpp
+Data data;
+Data *original = &data;
+```
+
+Después se realiza la serialización y deserialización:
+
+```cpp
+uintptr_t raw = Serializer::serialize(original);
+Data *result = Serializer::deserialize(raw);
+```
+
+Finalmente se comprueba:
+
+```cpp
+if (original == result)
+```
+
+Si ambos punteros son iguales, significa que `deserialize()` ha recuperado correctamente el puntero original.
+
+## Compilación
+
+```bash
+make
+```
+
+Para recompilar desde cero:
+
+```bash
+make re
+```
+
+## Ejecución
+
+```bash
+./serialize
+```
+
+Ejemplo de resultado:
+
+```text
+Original: 0x7fffffffe1a0
+Result:   0x7fffffffe1a0
+Pointers are equal
+```
+
+Las dos direcciones deben coincidir.
+
+## Archivos
+
+```text
+ex01/
+├── Makefile
+├── README.md
+├── main.cpp
+├── Data.hpp
+├── Serializer.hpp
+└── Serializer.cpp
+```

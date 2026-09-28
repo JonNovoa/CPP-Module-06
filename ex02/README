@@ -1,0 +1,157 @@
+# CPP06 - ex02: Identify real type
+
+## Objetivo
+
+Crear una clase base `Base` y tres clases derivadas `A`, `B` y `C`, y utilizar `dynamic_cast` para identificar el tipo real de un objeto.
+
+## Funcionamiento
+
+El programa crea aleatoriamente un objeto de tipo `A`, `B` o `C` mediante:
+
+```cpp
+Base *generate(void);
+```
+
+El objeto se devuelve como un puntero a `Base`.
+
+Después se identifica su tipo utilizando dos funciones diferentes:
+
+```cpp
+void identify(Base *p);
+void identify(Base &p);
+```
+
+La primera trabaja con un puntero y la segunda con una referencia.
+
+## dynamic_cast
+
+En este ejercicio el cast obligatorio es:
+
+```cpp
+dynamic_cast
+```
+
+### Con puntero
+
+```cpp
+dynamic_cast<A *>(p)
+```
+
+Si el objeto es de tipo `A`, devuelve un puntero válido.
+
+Si no es `A`, devuelve `NULL`.
+
+Por eso se puede utilizar directamente en un `if`:
+
+```cpp
+if (dynamic_cast<A *>(p))
+    std::cout << "A" << std::endl;
+```
+
+### Con referencia
+
+```cpp
+dynamic_cast<A &>(p)
+```
+
+Si el objeto es `A`, el cast funciona.
+
+Si no es `A`, lanza una excepción.
+
+Por eso se utiliza:
+
+```cpp
+try
+{
+    dynamic_cast<A &>(p);
+    std::cout << "A" << std::endl;
+}
+catch (std::exception &e)
+{
+}
+```
+
+## Generación aleatoria
+
+`generate()` utiliza:
+
+```cpp
+std::rand() % 3
+```
+
+para obtener un valor entre `0` y `2`:
+
+```text
+0 → A
+1 → B
+2 → C
+```
+
+En `main()` se utiliza:
+
+```cpp
+std::srand(std::time(NULL));
+```
+
+para cambiar la semilla del generador y evitar obtener siempre la misma secuencia al ejecutar el programa.
+
+## Comprobación
+
+El programa identifica el mismo objeto de las dos formas:
+
+```text
+Pointer: B
+Reference: B
+```
+
+El resultado puede ser `A`, `B` o `C`.
+
+## Compilación
+
+```bash
+make
+```
+
+Para limpiar los archivos objeto:
+
+```bash
+make clean
+```
+
+Para eliminar también el ejecutable:
+
+```bash
+make fclean
+```
+
+Para recompilar desde cero:
+
+```bash
+make re
+```
+
+## Ejecución
+
+```bash
+./identify
+```
+
+Ejemplo:
+
+```text
+Pointer: C
+Reference: C
+```
+
+## Archivos
+
+```text
+ex02/
+├── Makefile
+├── main.cpp
+├── Base.cpp
+├── Base.hpp
+├── A.hpp
+├── B.hpp
+└── C.hpp
+```

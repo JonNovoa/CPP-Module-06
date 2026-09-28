@@ -1,0 +1,167 @@
+# CPP06 - Exercise 00: Conversion of scalar types
+
+## Objetivo
+
+Crear una clase `ScalarConverter` capaz de recibir un literal como `42`, `42.0`, `42.0f` o `'a'` y convertirlo a:
+
+* `char`
+* `int`
+* `float`
+* `double`
+
+El ejercicio sirve principalmente para practicar `static_cast`.
+
+## Funcionamiento
+
+La clase contiene un único método estático:
+
+```cpp
+static void convert(const std::string &literal);
+```
+
+El programa:
+
+1. Detecta qué tipo de literal se ha introducido.
+2. Convierte el literal a su tipo correspondiente.
+3. Convierte ese valor a los otros tipos usando `static_cast`.
+4. Muestra el resultado de cada conversión.
+5. Indica `impossible` cuando una conversión no es posible.
+
+## Tipos aceptados
+
+### Char
+
+Ejemplo:
+
+```text
+'a'
+```
+
+Salida:
+
+```text
+char: 'a'
+int: 97
+float: 97.0f
+double: 97.0
+```
+
+### Int
+
+Ejemplo:
+
+```text
+42
+```
+
+Salida:
+
+```text
+char: '*'
+int: 42
+float: 42.0f
+double: 42.0
+```
+
+### Float
+
+Ejemplo:
+
+```text
+42.0f
+```
+
+### Double
+
+Ejemplo:
+
+```text
+42.0
+```
+
+## Pseudo-literales
+
+También se gestionan los pseudo-literales de C++:
+
+```text
+-nanf
++inff
+-inff
+nanf
+nan
++inf
+-inf
+```
+
+Para estos valores algunas conversiones no son posibles y se muestra:
+
+```text
+impossible
+```
+
+## Cast utilizado
+
+La conversión entre los diferentes tipos se realiza mediante:
+
+```cpp
+static_cast
+```
+
+Ejemplos:
+
+```cpp
+static_cast<int>(value);
+static_cast<float>(value);
+static_cast<double>(value);
+static_cast<char>(value);
+```
+
+## Compilación
+
+El proyecto se compila con:
+
+```bash
+make
+```
+
+También se puede recompilar desde cero con:
+
+```bash
+make re
+```
+
+## Ejecución
+
+```bash
+./convert 42
+./convert 42.0
+./convert 42.0f
+./convert "'A'"
+./convert nan
+```
+
+## Ejemplo
+
+```bash
+./convert 65
+```
+
+Resultado:
+
+```text
+char: 'A'
+int: 65
+float: 65.0f
+double: 65.0
+```
+
+## Archivos
+
+```text
+ex00/
+├── Makefile
+├── README.md
+├── main.cpp
+├── ScalarConverter.hpp
+└── ScalarConverter.cpp
+```
